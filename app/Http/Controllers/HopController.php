@@ -7,6 +7,7 @@ use App\Repositories\HopRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class HopController extends Controller
 {
@@ -21,6 +22,11 @@ class HopController extends Controller
     protected $request;
 
     /**
+     * @var Auth $me
+     */
+    protected $me;
+
+    /**
      * HopController constructor.
      * @param HopRepository $repository
      * @param Request $request
@@ -29,10 +35,11 @@ class HopController extends Controller
     {
         $this->request = $request;
         $this->repository = $repository;
+        $this->me = Auth::user();
     }
 
     /**
-     * Display a listing of the resource.
+     * List resources.
      *
      * @param Request $request
      * @return Response
@@ -43,16 +50,19 @@ class HopController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create and return new resource.
      *
+     * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
-    public function create()
+    public function create(Request $request)
     {
         $this->request->merge([
-            'user_id' => Auth::user()->id
+            'user_id' => 1, // Add some form of auth later
         ]);
-        $this->repository->create($this->request->all());
+
+        return response()->json($this->repository->create($this->request->all()));
     }
 
     /**

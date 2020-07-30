@@ -4,7 +4,9 @@
 namespace App\Repositories;
 
 use App\Models\Hop;
+use App\Repositories\Validators\HopValidator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Validation\ValidationException;
 
 class HopRepository
 {
@@ -13,9 +15,15 @@ class HopRepository
      */
     protected $model;
 
-    public function __construct(Hop $model)
+    /**
+     * @var HopValidator $validator
+     */
+    protected $validator;
+
+    public function __construct(Hop $model, HopValidator $validator)
     {
         $this->model = $model;
+        $this->validator = $validator;
     }
 
     /**
@@ -31,9 +39,11 @@ class HopRepository
      *
      * @param array $data
      * @return bool
+     * @throws ValidationException
      */
     public function create(array $data)
     {
+        $this->validator->validateToCreate($data);
         $this->model->fill($data);
         return $this->model->save($data);
     }

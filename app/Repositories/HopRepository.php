@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Models\Hop;
 use App\Repositories\Validators\HopValidator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
 class HopRepository
@@ -58,7 +59,13 @@ class HopRepository
      */
     public function read($id)
     {
-        return $this->model->find($id);
+        try {
+            $result = $this->model->where('id', $id)->firstOrFail();
+        } catch (ModelNotFoundException $exception) {
+            throw $exception;
+        }
+
+        return $result;
     }
 
     /**
@@ -71,8 +78,14 @@ class HopRepository
     public function update(int $id, array $data)
     {
         $this->validator->validateToUpdate($data);
-        $this->model->where('id', $id)->update($data);
-        return $this->model->find($id);
+        try {
+            $result = $this->model->where('id', $id)->firstOrFail();
+            $result->update($data);
+        } catch (ModelNotFoundException $exception) {
+            throw $exception;
+        }
+
+        return $result;
     }
 
     /**
@@ -81,6 +94,11 @@ class HopRepository
      */
     public function delete(int $id): void
     {
-        $this->model->where('id', $id)->delete();
+        try {
+            $result = $this->model->where('id', $id)->firstOrFail();
+            $result->delete();
+        } catch (ModelNotFoundException $exception) {
+            throw $exception;
+        }
     }
 }

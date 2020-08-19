@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\HopRepository;
+use App\Support\ResponseHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,6 +18,16 @@ class HopController extends Controller
     protected $repository;
 
     /**
+     * @var ResponseHandler $response
+     */
+    protected $response;
+
+    /**
+     * @var Request $request
+     */
+    protected $request;
+
+    /**
      * @var Auth $me
      */
     protected $me;
@@ -24,21 +35,23 @@ class HopController extends Controller
     /**
      * HopController constructor.
      * @param HopRepository $repository
+     * @param ResponseHandler $response
      */
-    public function __construct(HopRepository $repository)
+    public function __construct(HopRepository $repository, ResponseHandler $response, Request $request)
     {
         $this->repository = $repository;
+        $this->response = $response;
+        $this->request = $request;
         $this->me = Auth::user();
     }
 
     /**
      * List resources.
-     * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index()
     {
-        return self::httpResponse($this->repository->index($request));
+        return $this->response->collection($this->repository->index());
     }
 
     /**
@@ -53,7 +66,7 @@ class HopController extends Controller
             'user_id' => 1, // Add some form of auth later
         ]);
 
-        return self::httpResponse($this->repository->create($request->all()));
+        return $this->response->withCreated($this->repository->create($request->all()));
     }
 
     /**
@@ -63,7 +76,7 @@ class HopController extends Controller
      */
     public function read($id)
     {
-        return self::httpResponse($this->repository->read($id));
+        return $this->response->item($this->repository->read($id));
     }
 
     /**
@@ -75,7 +88,7 @@ class HopController extends Controller
      */
     public function update(int $id, Request $request)
     {
-        return self::httpResponse($this->repository->update($id, $request->all()));
+        return $this->response->item($this->repository->update($id, $request->all()));
     }
 
     /**
@@ -85,6 +98,6 @@ class HopController extends Controller
      */
     public function delete(int $id)
     {
-        return self::httpResponse($this->repository->delete($id));
+        return $this->response->withNoContent($this->repository->delete($id));
     }
 }

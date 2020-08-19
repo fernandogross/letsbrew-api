@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Hop;
 use App\Repositories\HopRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,11 +17,6 @@ class HopController extends Controller
     protected $repository;
 
     /**
-     * @var Request $request
-     */
-    protected $request;
-
-    /**
      * @var Auth $me
      */
     protected $me;
@@ -30,18 +24,15 @@ class HopController extends Controller
     /**
      * HopController constructor.
      * @param HopRepository $repository
-     * @param Request $request
      */
-    public function __construct(HopRepository $repository, Request $request)
+    public function __construct(HopRepository $repository)
     {
-        $this->request = $request;
         $this->repository = $repository;
         $this->me = Auth::user();
     }
 
     /**
      * List resources.
-     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -52,7 +43,6 @@ class HopController extends Controller
 
     /**
      * Create and return new resource.
-     *
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -63,62 +53,38 @@ class HopController extends Controller
             'user_id' => 1, // Add some form of auth later
         ]);
 
-        return self::httpResponse($this->repository->create($this->request->all()));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return self::httpResponse($this->repository->create($request->all()));
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Hop  $hop
+     * @param $id
      * @return Response
      */
-    public function show(Hop $hop)
+    public function read($id)
     {
-        //
+        return self::httpResponse($this->repository->read($id));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Hop  $hop
-     * @return Response
+     * Update the specified resource.
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function edit(Hop $hop)
+    public function update(int $id, Request $request)
     {
-        //
+        return self::httpResponse($this->repository->update($id, $request->all()));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Hop  $hop
-     * @return Response
+     * Delete the specified resource.
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update(Request $request, Hop $hop)
+    public function delete(int $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Hop  $hop
-     * @return Response
-     */
-    public function destroy(Hop $hop)
-    {
-        //
+        return self::httpResponse($this->repository->delete($id));
     }
 }

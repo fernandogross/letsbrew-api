@@ -25,4 +25,24 @@ class HopValidator extends AbstractValidator
             'characteristics' => 'sometimes|nullable',
         ];
     }
+
+    /**
+     * Returns array of rules to update resource
+     *
+     * @return array
+     */
+    public function rulesToUpdate(): array
+    {
+        return [
+            'user_id' => 'sometimes|integer',
+            'name' => 'sometimes|string',
+            'origin' => 'sometimes|nullable',
+            'price' => 'sometimes|nullable',
+            'type' => 'sometimes|in:' . implode(',', array_values(Hop::HOP_TYPES)),
+            'form' => 'sometimes|in:' . implode(',', array_values(Hop::HOP_FORMS)),
+            'alpha' => 'sometimes|int',
+            'beta' => 'sometimes|int',
+            'characteristics' => 'sometimes|nullable',
+        ];
+    }
 }

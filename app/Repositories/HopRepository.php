@@ -5,7 +5,6 @@ namespace App\Repositories;
 
 use App\Models\Hop;
 use App\Repositories\Validators\HopValidator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 
 class HopRepository
@@ -20,6 +19,11 @@ class HopRepository
      */
     protected $validator;
 
+    /**
+     * HopRepository constructor.
+     * @param Hop $model
+     * @param HopValidator $validator
+     */
     public function __construct(Hop $model, HopValidator $validator)
     {
         $this->model = $model;
@@ -27,7 +31,8 @@ class HopRepository
     }
 
     /**
-     * @return Hop[]|Collection
+     * List resources.
+     * @return mixed
      */
     public function index()
     {
@@ -35,8 +40,7 @@ class HopRepository
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     * Create and return new resource.
      * @param array $data
      * @return bool
      * @throws ValidationException
@@ -48,58 +52,35 @@ class HopRepository
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Update the specified resource.
+     * @param $id
+     * @return mixed
      */
-    public function store(Request $request)
+    public function read($id)
     {
-        //
+        return $this->model->find($id);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Hop  $hop
-     * @return \Illuminate\Http\Response
+     * Update the specified resource.
+     * @param int $id
+     * @param array $data
+     * @return Hop
+     * @throws ValidationException
      */
-    public function show(Hop $hop)
+    public function update(int $id, array $data)
     {
-        //
+        $this->validator->validateToUpdate($data);
+        $this->model->where('id', $id)->update($data);
+        return $this->model->find($id);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Hop  $hop
-     * @return \Illuminate\Http\Response
+     * Delete the specified resource.
+     * @param int $id
      */
-    public function edit(Hop $hop)
+    public function delete(int $id): void
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Hop  $hop
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Hop $hop)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Hop  $hop
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Hop $hop)
-    {
-        //
+        $this->model->where('id', $id)->delete();
     }
 }

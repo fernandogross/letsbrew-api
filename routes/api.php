@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware(['cors'])->group(function () {
     /** Hops */
     Route::get('/hops', 'HopController@index');
+    Route::get('/hops/{id}', 'HopController@read');
+    Route::put('/hops/{id}', 'HopController@update');
     Route::post('/hops', 'HopController@create');
+    Route::delete('/hops/{id}', 'HopController@delete');
 });
 

@@ -14,8 +14,8 @@ class CreateUserIdColumnOnHops extends Migration
     public function up()
     {
         Schema::table('hops', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->unsignedBigInteger('user_id')->after('id');
+            $table->foreign('user_id', 'user_id_fk')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

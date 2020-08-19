@@ -16,13 +16,13 @@ class CreateHopsTable extends Migration
         Schema::create('hops', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->char('name');
-            $table->char('origin');
-            $table->char('characteristics');
-            $table->char('price');
-            $table->char('type');
-            $table->char('form');
-            $table->char('alpha');
-            $table->char('beta');
+            $table->char('origin')->nullable();
+            $table->char('characteristics')->nullable();
+            $table->char('price')->nullable();
+            $table->integer('type');
+            $table->integer('form');
+            $table->integer('alpha');
+            $table->integer('beta');
             $table->timestamps();
         });
     }

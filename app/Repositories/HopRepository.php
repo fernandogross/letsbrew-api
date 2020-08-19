@@ -31,7 +31,7 @@ class HopRepository
      */
     public function index()
     {
-        return $this->model->all();
+        return $this->model->get();
     }
 
     /**
@@ -44,8 +44,7 @@ class HopRepository
     public function create(array $data)
     {
         $this->validator->validateToCreate($data);
-        $this->model->fill($data);
-        return $this->model->save($data);
+        return $this->model->create($data);
     }
 
     /**

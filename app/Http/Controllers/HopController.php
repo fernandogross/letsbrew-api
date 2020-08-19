@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hop;
 use App\Repositories\HopRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -42,18 +43,18 @@ class HopController extends Controller
      * List resources.
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
-        return response()->json($this->repository->index($request));
+        return self::httpResponse($this->repository->index($request));
     }
 
     /**
      * Create and return new resource.
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      * @throws ValidationException
      */
     public function create(Request $request)
@@ -62,7 +63,7 @@ class HopController extends Controller
             'user_id' => 1, // Add some form of auth later
         ]);
 
-        return response()->json($this->repository->create($this->request->all()));
+        return self::httpResponse($this->repository->create($this->request->all()));
     }
 
     /**

@@ -17,4 +17,15 @@ class Hop extends Model
         'beta',
         'characteristics',
     ];
+
+    public const HOP_TYPES = [
+        'Bittering' => 1,
+        'Aroma' => 2,
+    ];
+
+    public const HOP_FORMS = [
+        'Pellet' => 1,
+        'Whole' => 2,
+        'Plug' => 3,
+    ];
 }

@@ -12,12 +12,12 @@ $factory->define(Hop::class, function (Faker $faker) {
             return factory(User::class)->create()->id;
         },
         'name' => $faker->name,
-        'name' => $faker->country,
-        'price' => $faker->randomDigitNotNull,
+        'origin' => $faker->country,
+        'price' => $faker->numberBetween(1, 99),
         'type' => $faker->randomElement(array_values(Hop::HOP_TYPES)),
         'form' => $faker->randomElement(array_values(Hop::HOP_FORMS)),
-        'alpha' => $faker->randomDigitNotNull,
-        'beta' => $faker->randomDigitNotNull,
+        'alpha' => $faker->numberBetween(10, 15),
+        'beta' => $faker->numberBetween(5, 15),
         'characteristics' => $faker->text,
     ];
 });
